@@ -30,7 +30,7 @@ func (this_ *Builder) grow() {
 	if cap(this_.data) == 0 {
 		this_.data = GetSample(40960)[:0]
 		runtime.SetFinalizer(&this_.data, func(d *[]byte) {
-			PutSample(this_.data)
+			PutSample(*d)
 		})
 	} else {
 		tmp := GetSample(cap(this_.data) * 2)

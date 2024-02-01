@@ -1,16 +1,13 @@
 package gorm
 
 import (
+	"runtime"
 	"unicode/utf8"
 	"unsafe"
 )
 
 type Builder struct {
 	data []byte
-}
-
-func NewBuilder() *Builder {
-	return &Builder{}
 }
 
 func (this_ *Builder) String() string {
@@ -31,10 +28,14 @@ func (this_ *Builder) Reset() {
 
 func (this_ *Builder) grow() {
 	if cap(this_.data) == 0 {
-		this_.data = make([]byte, 0, 40960)
+		this_.data = GetSample(40960)[:0]
+		runtime.SetFinalizer(&this_.data, func(d *[]byte) {
+			PutSample(this_.data)
+		})
 	} else {
-		tmp := make([]byte, len(this_.data), cap(this_.data)*2)
+		tmp := GetSample(cap(this_.data) * 2)
 		copy(tmp, this_.data)
+		PutSample(this_.data)
 		this_.data = tmp
 	}
 }

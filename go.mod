@@ -1,6 +1,6 @@
 module gorm.io/gorm
 
-go 1.18
+go 1.21
 
 require (
 	github.com/jinzhu/inflection v1.0.0

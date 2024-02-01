@@ -40,7 +40,7 @@ type Statement struct {
 	Context              context.Context
 	RaiseErrorOnNotFound bool
 	SkipHooks            bool
-	SQL                  strings.Builder
+	SQL                  Builder
 	Vars                 []interface{}
 	CurDestIndex         int
 	attrs                []interface{}

@@ -15,25 +15,37 @@ type Builder struct {
 }
 
 func (this_ *Builder) String() string {
+	if this_.d == nil {
+		return ""
+	}
 	return unsafe.String(unsafe.SliceData(this_.d.data), len(this_.d.data))
 }
 
 func (this_ *Builder) Len() int {
+	if this_.d == nil {
+		return 0
+	}
 	return len(this_.d.data)
 }
 
 func (this_ *Builder) Cap() int {
+	if this_.d == nil {
+		return 0
+	}
 	return cap(this_.d.data)
 }
 
 func (this_ *Builder) Reset() {
+	if this_.d == nil {
+		return
+	}
 	this_.d.data = this_.d.data[:0]
 }
 
 func (this_ *Builder) grow() {
 	if cap(this_.d.data) == 0 {
 		this_.d.data = GetSample(40960)[:0]
-		runtime.SetFinalizer(&this_.d, func(d *d) {
+		runtime.SetFinalizer(this_.d, func(d *d) {
 			PutSample(d.data)
 		})
 	} else {
